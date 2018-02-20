@@ -158,11 +158,11 @@ void setup() {
     sendInt(power);
   });
    
-    webServer.on("/brightness", HTTP_POST, []() {
+/*    webServer.on("/brightness", HTTP_POST, []() {
     String value = webServer.arg("value");
     setBrightness(value.toInt());
     sendInt(brightness);
-  });
+  }); */
    
   //list directory
   webServer.on("/list", HTTP_GET, handleFileList);
@@ -230,7 +230,7 @@ void loop()
 
 void loadSettings()
 {
-   brightness = EEPROM.read(0);
+//   brightness = EEPROM.read(0);
    power = EEPROM.read(5);
 }
 
@@ -244,7 +244,7 @@ void setPower(uint8_t value)
   broadcastInt("power", power);
 }
 
-void setBrightness(uint8_t value)
+/*void setBrightness(uint8_t value)
 {
   if (value > 180)
     value = 180;
@@ -258,7 +258,7 @@ void setBrightness(uint8_t value)
   EEPROM.commit();
 
   broadcastInt("brightness", brightness);
-}
+}*/
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
 
