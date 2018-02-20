@@ -157,7 +157,13 @@ void setup() {
     setPower(value.toInt());
     sendInt(power);
   });
-
+   
+    webServer.on("/brightness", HTTP_POST, []() {
+    String value = webServer.arg("value");
+    setBrightness(value.toInt());
+    sendInt(brightness);
+  });
+   
   //list directory
   webServer.on("/list", HTTP_GET, handleFileList);
   //load editor
@@ -224,7 +230,8 @@ void loop()
 
 void loadSettings()
 {
-  power = EEPROM.read(5);
+   brightness = EEPROM.read(0);
+   power = EEPROM.read(5);
 }
 
 void setPower(uint8_t value)
@@ -235,6 +242,22 @@ void setPower(uint8_t value)
   EEPROM.commit();
 
   broadcastInt("power", power);
+}
+
+void setBrightness(uint8_t value)
+{
+  if (value > 180)
+    value = 180;
+  else if (value < 0) value = 0;
+
+  brightness = value;
+
+  //FastLED.setBrightness(brightness);
+
+  EEPROM.write(0, brightness);
+  EEPROM.commit();
+
+  broadcastInt("brightness", brightness);
 }
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
